@@ -1,6 +1,6 @@
 // src/usecase/CreateUserUseCase.ts
 import { inject, injectable } from "tsyringe";
-import { UserRepository } from "@/domain/repository/UserRepository";
+import { UserRepository } from "@/domain/repositories/UserRepository";
 import { RabbitMQPublisher } from "@/infrastructure/rabbitmq/publisher";
 
 interface CreateUserInput {
