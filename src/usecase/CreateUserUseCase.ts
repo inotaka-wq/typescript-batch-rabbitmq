@@ -1,7 +1,7 @@
 // src/usecase/CreateUserUseCase.ts
-import { injectable, inject } from "tsyringe";
-import { UserRepository } from "../domain/repositories/UserRepository";
-import { User } from "../domain/entities/User";
+import { inject, injectable } from "tsyringe";
+import { UserRepository } from "@/domain/repository/UserRepository";
+import { RabbitMQPublisher } from "@/infrastructure/rabbitmq/publisher";
 
 interface CreateUserInput {
   name: string;
@@ -11,20 +11,19 @@ interface CreateUserInput {
 @injectable()
 export class CreateUserUseCase {
   constructor(
-    @inject("UserRepository") private userRepository: UserRepository
+    @inject("UserRepository") private userRepository: UserRepository,
+    @inject("RabbitMQPublisher") private publisher: RabbitMQPublisher
   ) {}
 
   async execute(input: CreateUserInput): Promise<void> {
-    // すでに存在するか確認
-    const existing = await this.userRepository.findByEmail(input.email);
-    if (existing) {
-      console.warn(`⚠️ User with email ${input.email} already exists.`);
-      return;
-    }
+    const user = await this.userRepository.create(input);
 
-    const user = new User(null, input.name, input.email, new Date());
-    await this.userRepository.create(user);
-
-    console.log(`✅ User "${input.name}" created`);
+    // 成功したら次の処理へ送信
+    await this.publisher.publish({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+    });
   }
 }
