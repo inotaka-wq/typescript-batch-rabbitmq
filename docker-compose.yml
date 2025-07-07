@@ -1,29 +1,39 @@
-version: "3.9"
 services:
   mysql:
     image: mysql:8.0
     container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: typescript_batch
     volumes:
       - mysql-data:/var/lib/mysql
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     ports:
       - "5672:5672"
-      - "15672:15672" # 管理画面用
+      - "15672:15672" # 管理UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - mysql
+      - rabbitmq
+    volumes:
+      - .:/app
+    command: npm run dev
+    env_file:
+      - .env
 
 volumes:
   mysql-data:
