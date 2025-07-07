@@ -1,3 +1,6 @@
-import "reflect-metadata";
+import { sequelize } from "./infrastructure/db/sequelize";
+import { UserModel } from "./infrastructure/db/models/UserModel";
 
-console.log("🐇 typescript-batch-rabbitmq started");
+sequelize.sync().then(() => {
+  console.log("✅ MySQL connected and UserModel synced!");
+});
