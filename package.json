@@ -1,0 +1,31 @@
+{
+  "name": "typescript-batch-rabbitmq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inotaka-wq/typescript-batch-rabbitmq.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/inotaka-wq/typescript-batch-rabbitmq/issues"
+  },
+  "homepage": "https://github.com/inotaka-wq/typescript-batch-rabbitmq#readme",
+  "dependencies": {
+    "amqplib": "^0.10.8",
+    "log4js": "^6.9.1",
+    "mysql2": "^3.14.1",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^6.37.7",
+    "ts-node": "^10.9.2",
+    "tsyringe": "^4.10.0",
+    "typescript": "^5.8.3"
+  }
+}
